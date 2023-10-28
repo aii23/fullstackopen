@@ -1,53 +1,7 @@
 import { useState } from "react";
-
-const InputForm = ({ addPerson }) => {
-    const [newName, setNewName] = useState("");
-
-    const handleNameChange = (event) => {
-        setNewName(event.target.value);
-    };
-
-    const onContactSubmit = (event) => {
-        event.preventDefault();
-        if (
-            addPerson({
-                name: newName,
-            })
-        ) {
-            setNewName("");
-        } else {
-            alert(`Contact with name ${newName} already exists`);
-        }
-    };
-
-    return (
-        <>
-            <form onSubmit={onContactSubmit}>
-                <div>
-                    name: <input value={newName} onChange={handleNameChange} />
-                </div>
-                <div>
-                    <button type="submit">add</button>
-                </div>
-            </form>
-        </>
-    );
-};
-
-const Contact = ({ name }) => {
-    return <p>{name}</p>;
-};
-
-const Contacts = ({ persons }) => {
-    return (
-        <>
-            <h2>Numbers</h2>
-            {persons.map((person) => (
-                <Contact key={person.name} name={person.name} />
-            ))}
-        </>
-    );
-};
+import { InputForm } from "./InputForm";
+import { Contacts } from "./Contacts";
+import { Filter } from "./Filter";
 
 const App = () => {
     const [persons, setPersons] = useState([
@@ -56,6 +10,8 @@ const App = () => {
         { name: "Dan Abramov", number: "12-43-234345" },
         { name: "Mary Poppendieck", number: "39-23-6423122" },
     ]);
+
+    const [filter, setFilter] = useState("");
 
     const addPerson = (newPerson) => {
         if (persons.some((person) => person.name == newPerson.name)) {
@@ -67,9 +23,11 @@ const App = () => {
 
     return (
         <div>
-            <h2>Phonebook</h2>
+            <h1>Phonebook</h1>
+            <Filter filter={filter} setFilter={setFilter} />
+            <h2>Enter new contact</h2>
             <InputForm addPerson={addPerson} />
-            <Contacts persons={persons} />
+            <Contacts persons={persons} filter={filter} />
         </div>
     );
 };
