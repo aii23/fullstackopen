@@ -10,8 +10,9 @@ const addContact = (contact) => {
 };
 
 const updateContact = (contact) => {
+    console.log("Update contact", contact);
     return axios
-        .put(`${baseUrl}/${contact.id}`)
+        .put(`${baseUrl}/${contact.id}`, contact)
         .then((response) => response.data);
 };
 

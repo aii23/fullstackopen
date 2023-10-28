@@ -14,13 +14,37 @@ const App = () => {
     }, []);
 
     const addPerson = (newPerson) => {
-        if (persons.some((person) => person.name == newPerson.name)) {
-            throw "Duplicate";
+        const existingPerson = persons.find(
+            (person) => person.name == newPerson.name
+        );
+        if (existingPerson) {
+            if (
+                window.confirm(
+                    `Do you want to change phone for ${existingPerson.name} contract?`
+                )
+            ) {
+                existingPerson.number = newPerson.number;
+                return phonebookService
+                    .updateContact(existingPerson)
+                    .then((returnedPerson) => {
+                        setPersons(
+                            persons.map((person) =>
+                                person.id == returnedPerson.id
+                                    ? returnedPerson
+                                    : person
+                            )
+                        );
+                    });
+            } else {
+                return Promise.resolve();
+            }
+        } else {
+            return phonebookService
+                .addContact(newPerson)
+                .then((returnedPerson) => {
+                    setPersons(persons.concat(returnedPerson));
+                });
         }
-
-        return phonebookService.addContact(newPerson).then((returnedPerson) => {
-            setPersons(persons.concat(returnedPerson));
-        });
     };
 
     const removePerson = (id) => {

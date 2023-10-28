@@ -15,10 +15,11 @@ export const Contacts = ({ persons, filter, removePerson }) => {
                   person.name.toLowerCase().includes(loweredFilter)
               );
 
-    const handleContactRemove = (id) => (event) => {
+    const handleContactRemove = (id, name) => (event) => {
         event.preventDefault();
 
-        return removePerson(id).catch((error) => console.log(error));
+        if (window.confirm(`Do you want to delete ${name}?`))
+            removePerson(id).catch((error) => console.log(error));
     };
 
     return (
@@ -29,7 +30,10 @@ export const Contacts = ({ persons, filter, removePerson }) => {
                     key={person.id}
                     name={person.name}
                     number={person.number}
-                    handleContactRemove={handleContactRemove(person.id)}
+                    handleContactRemove={handleContactRemove(
+                        person.id,
+                        person.name
+                    )}
                 />
             ))}
         </>
