@@ -10,17 +10,18 @@ export const InputForm = ({ addPerson }) => {
 
     const onContactSubmit = (event) => {
         event.preventDefault();
-        if (
-            addPerson({
-                name: newName,
-                number: newNumber,
+
+        addPerson({
+            name: newName,
+            number: newNumber,
+        })
+            .then(() => {
+                setNewName("");
+                setNewNumber("");
             })
-        ) {
-            setNewName("");
-            setNewNumber("");
-        } else {
-            alert(`Contact with name ${newName} already exists`);
-        }
+            .catch((error) => {
+                console.log(error);
+            });
     };
 
     return (

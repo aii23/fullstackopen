@@ -1,24 +1,26 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import phonebookService from "./services/phonebook";
 import { InputForm } from "./InputForm";
 import { Contacts } from "./Contacts";
 import { Filter } from "./Filter";
 
 const App = () => {
-    const [persons, setPersons] = useState([
-        { name: "Arto Hellas", number: "040-123456" },
-        { name: "Ada Lovelace", number: "39-44-5323523" },
-        { name: "Dan Abramov", number: "12-43-234345" },
-        { name: "Mary Poppendieck", number: "39-23-6423122" },
-    ]);
+    const [persons, setPersons] = useState([]);
 
     const [filter, setFilter] = useState("");
 
+    useEffect(() => {
+        phonebookService.getAll().then((data) => setPersons(data));
+    }, []);
+
     const addPerson = (newPerson) => {
         if (persons.some((person) => person.name == newPerson.name)) {
-            return false;
+            throw "Duplicate";
         }
-        setPersons(persons.concat(newPerson));
-        return true;
+
+        return phonebookService.addContact(newPerson).then((returnedPerson) => {
+            setPersons(persons.concat(returnedPerson));
+        });
     };
 
     return (
