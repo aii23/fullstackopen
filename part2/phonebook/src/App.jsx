@@ -23,13 +23,23 @@ const App = () => {
         });
     };
 
+    const removePerson = (id) => {
+        return phonebookService.removeContact(id).then(() => {
+            setPersons(persons.filter((person) => person.id != id));
+        });
+    };
+
     return (
         <div>
             <h1>Phonebook</h1>
             <Filter filter={filter} setFilter={setFilter} />
             <h2>Enter new contact</h2>
             <InputForm addPerson={addPerson} />
-            <Contacts persons={persons} filter={filter} />
+            <Contacts
+                persons={persons}
+                filter={filter}
+                removePerson={removePerson}
+            />
         </div>
     );
 };

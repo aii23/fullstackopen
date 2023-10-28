@@ -16,7 +16,7 @@ const updateContact = (contact) => {
 };
 
 const removeContact = (id) => {
-    return axios.delete(`${baseUrl}/id`).then((responnse) => response.data);
+    return axios.delete(`${baseUrl}/${id}`).then((response) => response.data);
 };
 
 export default { getAll, addContact, updateContact, removeContact };
