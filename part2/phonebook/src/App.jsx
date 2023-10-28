@@ -9,10 +9,15 @@ const InputForm = ({ addPerson }) => {
 
     const onContactSubmit = (event) => {
         event.preventDefault();
-        addPerson({
-            name: newName,
-        });
-        setNewName("");
+        if (
+            addPerson({
+                name: newName,
+            })
+        ) {
+            setNewName("");
+        } else {
+            alert(`Contact with name ${newName} already exists`);
+        }
     };
 
     return (
@@ -52,8 +57,12 @@ const App = () => {
         { name: "Mary Poppendieck", number: "39-23-6423122" },
     ]);
 
-    const addPerson = (person) => {
-        setPersons(persons.concat(person));
+    const addPerson = (newPerson) => {
+        if (persons.some((person) => person.name == newPerson.name)) {
+            return false;
+        }
+        setPersons(persons.concat(newPerson));
+        return true;
     };
 
     return (
